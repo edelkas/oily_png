@@ -2,6 +2,7 @@ Makefile
 /conftest.dSYM
 *.bundle
 *.o
+*.so
 *.rbc
 /.bundle/
 Gemfile.lock
@@ -9,3 +10,4 @@ Gemfile.lock
 oily_png-*.gem
 .DS_Store
 /spec/resources/_*.*
+/tmp

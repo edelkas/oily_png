@@ -5,10 +5,9 @@ module OilyPNG
     base::Canvas.send(:extend, OilyPNG::PNGDecoding)
     base::Canvas.send(:include, OilyPNG::PNGEncoding)
 
-
     base::Color.send(:include, OilyPNG::Color)
-    
-    base::Color.extend OilyPNG::Color
+    base::Color.send(:extend, OilyPNG::Color)
+
     base::Canvas.send(:include, OilyPNG::Resampling)
     base::Canvas.send(:include, OilyPNG::Operations)
   end
