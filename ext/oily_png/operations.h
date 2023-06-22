@@ -47,4 +47,6 @@ VALUE oily_png_rotate_left_bang(VALUE self);
 */
 VALUE oily_png_rotate_right_bang(VALUE self);
 
+VALUE oily_png_fast_rect(int argc, VALUE *argv, VALUE self);
+
 #endif
