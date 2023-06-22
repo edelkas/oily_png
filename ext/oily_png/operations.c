@@ -65,6 +65,38 @@ VALUE oily_png_compose_bang(int argc, VALUE *argv, VALUE self) {
   return self;
 }
 
+VALUE oily_png_fast_compose_bang(int argc, VALUE *argv, VALUE self) {
+  // Parse arguments
+  VALUE other, opt_offset_x, opt_offset_y;
+  rb_scan_args(argc, argv, "12", &other, &opt_offset_x, &opt_offset_y);
+  long offset_x = 0, offset_y = 0;
+  if (FIXNUM_P(opt_offset_x)) offset_x = FIX2LONG(opt_offset_x);
+  if (FIXNUM_P(opt_offset_y)) offset_y = FIX2LONG(opt_offset_y);
+
+  // Check dimensions
+  long self_width   = FIX2LONG(rb_funcall(self,  rb_intern("width"),  0));
+  long self_height  = FIX2LONG(rb_funcall(self,  rb_intern("height"), 0));
+  long other_width  = FIX2LONG(rb_funcall(other, rb_intern("width"),  0));
+  long other_height = FIX2LONG(rb_funcall(other, rb_intern("height"), 0));
+  oily_png_check_size_constraints(self_width, self_height, other_width, other_height, offset_x, offset_y);
+  
+  // Get pixel data
+  VALUE* bg_pixels = RARRAY_PTR(rb_funcall(self,  rb_intern("pixels"), 0));
+  VALUE* fg_pixels = RARRAY_PTR(rb_funcall(other, rb_intern("pixels"), 0));
+
+  // Replace pixel data accordingly
+  long w = other_width;
+  long o = self_width - w + 1;
+  long i = offset_y * self_width + offset_x - o;
+  long c = other_width * other_height;
+  for (long p = 0; p < c; p++) {
+    i += p % w == 0 ? o : 1;
+    if (FIX2UINT(fg_pixels[p]) == 0) continue;
+    bg_pixels[i] = fg_pixels[p];
+  }
+  return self;
+}
+
 
 VALUE oily_png_replace_bang(int argc, VALUE *argv, VALUE self) {
   // Corresponds to the other image(foreground) that we want to compose onto this one(background).

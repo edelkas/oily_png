@@ -21,7 +21,10 @@ void oily_png_check_size_constraints(long self_width, long self_height, long oth
   
   This method should replace ChunkyPNG::Canvas.compose!
 */
-VALUE oily_png_compose_bang(int argc, VALUE *argv, VALUE c);
+VALUE oily_png_compose_bang(int argc, VALUE *argv, VALUE self);
+
+/* Fast version for masks */
+VALUE oily_png_fast_compose_bang(int argc, VALUE *argv, VALUE self);
 
 /* 
   C replacement method for composing another image onto this image by simply replacing pixels.
@@ -31,7 +34,7 @@ VALUE oily_png_compose_bang(int argc, VALUE *argv, VALUE c);
   
   This method should replace ChunkyPNG::Canvas.replace!
 */
-VALUE oily_png_replace_bang(int argc, VALUE *argv, VALUE c);
+VALUE oily_png_replace_bang(int argc, VALUE *argv, VALUE self);
 
 
 /*

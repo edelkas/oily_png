@@ -28,6 +28,7 @@ void Init_oily_png() {
 
   // Setup Operations module
   VALUE OilyPNG_Operations = rb_define_module_under(OilyPNG, "Operations");
+  rb_define_method(OilyPNG_Operations, "fast_compose!", oily_png_fast_compose_bang, -1);
   rb_define_method(OilyPNG_Operations, "compose!", oily_png_compose_bang, -1);
   rb_define_method(OilyPNG_Operations, "replace!", oily_png_replace_bang, -1);
   rb_define_method(OilyPNG_Operations, "rotate_left!", oily_png_rotate_left_bang, 0);
