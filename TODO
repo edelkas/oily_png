@@ -1,0 +1,5 @@
+Add Drawing module
+Code regular rect method, and if it's just as fast as the fast_rect method, then leave just that one
+Try to see why fast_compose is not faster than compose
+Add C versions for flipping hor/ver
+Perhaps translate part of the Ruby screenshot generation code directly to C (e.g. object composition, to save the function calls)
