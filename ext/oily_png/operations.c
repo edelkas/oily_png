@@ -102,22 +102,33 @@ VALUE oily_png_fast_rect(int argc, VALUE *argv, VALUE self) {
   VALUE opt_x0, opt_y0, opt_x1, opt_y1, opt_stroke_color, opt_fill_color;
   rb_scan_args(argc, argv, "42", &opt_x0, &opt_y0, &opt_x1, &opt_y1, &opt_stroke_color, &opt_fill_color);
   long x0 = FIX2LONG(opt_x0), y0 = FIX2LONG(opt_y0), x1 = FIX2LONG(opt_x1), y1 = FIX2LONG(opt_y1);
-  VALUE stroke_color = LONG2FIX(255), fill_color = LONG2FIX(0);
+  VALUE stroke_color = LONG2FIX(0), fill_color = LONG2FIX(0);
   if (FIXNUM_P(opt_stroke_color)) stroke_color = opt_stroke_color;
   if (FIXNUM_P(opt_fill_color)) fill_color = opt_fill_color;
-  if (FIX2UINT(fill_color) == 0) return self;
 
   // Retrieve values
   long width = FIX2LONG(rb_funcall(self, rb_intern("width"), 0));
   VALUE* pixels = RARRAY_PTR(rb_funcall(self, rb_intern("pixels"), 0));
   
-  // Draw rectangle
-  long x = x0, y = y0;
-  for (x = x0; x <= x1; x++) {
-    for (y = y0; y <= y1; y++) {
-      pixels[y * width + x] = fill_color;
+  // Draw rectangle filling, unless it's transparent
+  if (FIX2UINT(fill_color) != 0) {
+    long x, y;
+    for (x = x0; x <= x1; x++) {
+      for (y = y0; y <= y1; y++) {
+        pixels[y * width + x] = fill_color;
+      }
     }
   }
+
+  // Draw rectangle frame, unless it's transparent
+  if (FIX2UINT(stroke_color) != 0) {
+    long x, y;
+    for (x = x0; x <= x1; x++) pixels[y0 * width + x] = stroke_color;
+    for (x = x0; x <= x1; x++) pixels[y1 * width + x] = stroke_color;
+    for (y = y0; y <= y1; y++) pixels[y * width + x0] = stroke_color;
+    for (y = y0; y <= y1; y++) pixels[y * width + x1] = stroke_color; 
+  }
+
   return self;
 }
 
