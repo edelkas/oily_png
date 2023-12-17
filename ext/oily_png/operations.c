@@ -2,10 +2,10 @@
 
 void oily_png_check_size_constraints(long self_width, long self_height, long other_width, long other_height, long offset_x, long offset_y){
   // For now, these raise a standard runtime error. They should however raise custom exception classes (OutOfBounds)
-  if(self_width  < other_width  + offset_x){
+  if(offset_x < 0 || self_width  < other_width  + offset_x){
     rb_raise(rb_eRuntimeError, "Background image width is too small!");
   }
-  if(self_height < other_height + offset_y){
+  if(offset_y < 0 || self_height < other_height + offset_y){
     rb_raise(rb_eRuntimeError, "Background image height is too small!");
   }
 }
